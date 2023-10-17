@@ -64,7 +64,9 @@ class Cart:
         Если remove_count не передан, то удаляется вся позиция
         Если remove_count больше, чем количество продуктов в позиции, то удаляется вся позиция
         """
-        if remove_count is None or remove_count > self.products[product]:
+        if product not in self.products:
+            raise ValueError
+        elif remove_count is None or remove_count >= self.products[product]:
             del self.products[product]
         else:
             self.products[product] -= remove_count
@@ -86,6 +88,6 @@ class Cart:
         """
         for product, quantity in self.products.items():
             if not product.check_quantity(quantity):
-                product.quantity -= quantity
-
+                raise ValueError('Недостаточно продуктов на складе')
+            product.buy(quantity)
         self.clear()
