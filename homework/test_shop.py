@@ -107,3 +107,29 @@ class TestCart:
         cart.add_product(product, 1500)
         with pytest.raises(ValueError):
             cart.buy()
+
+    def test_deletes_as_much_as_in_trash(self, product, cart):
+        """
+        Проверка на удаление колличества продукта из корзины равного колличеству в корзине
+        """
+        cart.add_product(product, 500)
+        cart.remove_product(product, 500)
+        assert len(cart.products) == 0
+
+    def test_delete_more_than_in_cart(self, product, cart):
+        """
+        Проверка на удаление большего колличества продукта чем есть в корзине
+        """
+        cart.add_product(product, 500)
+        cart.remove_product(product, 700)
+
+        assert len(cart.products) == 0
+
+    def test_delete_less_than_in_trash(self, product, cart):
+        """
+        Проверка на удаление меньшего колличества продукта чем есть в корзине
+        """
+        cart.add_product(product, 500)
+        cart.remove_product(product, 200)
+
+        assert cart.products[product] == 300
